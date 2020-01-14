@@ -1,0 +1,12 @@
+CN1
+1         NC
+2         D-
+3         D+
+4,5,6     GND
+
+CN4 POWER
+1       GND
+2       +24 VDC
+3       +24 VDC
+4       GND
+
