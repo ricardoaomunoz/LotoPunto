@@ -27,9 +27,9 @@ class PicameraControl(object):
         self.picx.stop_preview()
         self.picx.close()
 
-    def start_video(self, video_path, ):
+    def start_video(self, video_path):
         self.picx.start_preview()
-        self.picx.start_recording('mi_video.h264')
+        self.picx.start_recording(video_path)
         self.picx.wait_recording()
 
     def stop_recordingvideo(self):
