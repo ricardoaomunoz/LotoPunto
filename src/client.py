@@ -1,7 +1,7 @@
 import time
 import os
 
-from services.receipt_content import ReceiptHeader, ReceiptDescription
+from services.receipt_content import ReceiptHeader
 this_dir, this_filename = os.path.split(__file__)
 GRAPHICS_PATH = os.path.join(this_dir, "examples/graphics/climacons/clear-night.png")
 
