@@ -12,42 +12,66 @@
             size:self.size
             pos: self.pos
 
-    # qr_label: QrRead
-
+    qr_label: QrRead
     BoxLayout:
-        size_hint: 0.1,0.2
+        size_hint: 1,1
         canvas:
             Color:
-                rgb:1,0,05, 0.5
-        canvas:
+                rgb: 1,0,0
+        
             Rectangle:
                 size: self.size
                 pos: self.pos
         
-        Button:
-            text: "Read QR"
-            #size_hint: None, None
-            #size: 200, 50
+    #     # Button:
+    #     #     text: "Read QR"
+    #     #     size_hint: None, None
+    #     #     size: 200, 50
             
 
-    # BoxLayout:
-    #     orientation: "vertical"
-    #     size_hint: 1,1
-    #     canvas:
-    #         Color:
-    #             rgb:0,0,1
-    #         Rectangle:
-    #             size: self.size
-    #             pos: self.pos
+    BoxLayout:
+        orientation: "vertical"
+        size_hint: 1,1
+        canvas:
+            Color:
+                rgb: 0,0,1
+            Rectangle:
+                size: self.size
+                pos: self.pos
+        
             
-        # BoxLayout:
-        #     size_hint: 1,1
-        #     canvas:
-        #         Color:
-        #             rgb:1,1,1,.5
-        #         Rectangle:
-        #             size: self.size
-        #             pos: self.pos
+        BoxLayout:
+            size_hint: 1,1
+            canvas:
+                Color:
+                    rgba:1,1,1,.5
+                Rectangle:
+                    size: self.size
+                    pos: self.pos
+            Button:
+                text: "Read QR"
+                size_hint: None, None
+                size: 400, 50
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                on_press:root.btn()
+
+        BoxLayout:
+            orientation: "vertical"
+            size_hint: 1,1
+            canvas:
+                Color:
+                    rgba:1,1,1,.4
+                Rectangle:
+                    size: self.size
+                    pos: self.pos
+            Label:
+                text:"Text Read.."
+                #size_hint:0.2, 0.2
+
+            TextInput:
+                id:QrRead
+                multiline:False
+                # size_hint:0.2, 0.2
 
 
     # GridLayout:
