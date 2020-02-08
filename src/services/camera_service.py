@@ -64,7 +64,7 @@ class PicameraControl(object):
                 read_ready = False
             elif len(barcodes) < 1:
                 timeToread+=1
-                if timeToread >= 100:
+                if timeToread >= 10000:
                     print("time out to read barcode")
                     find = False
                     data = "Not Found"
@@ -83,9 +83,13 @@ class PicameraControl(object):
                 tipo = barcodes[0].type
                 find = True
                 read_ready = False
-            time.sleep(0.1)
+            #time.sleep(0.1)
             # show the output frame
             cv2.imshow("Barcode Scanner", frame)
+            key = cv2.waitKey(1) & 0xFF
+            # if the `q` key was pressed, break from the loop
+            if key == ord("q"):
+                break
 
         return ([find, data, tipo])
 
