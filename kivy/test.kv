@@ -14,6 +14,7 @@
 
     qr_label: QrRead
     BoxLayout:
+        orientation: "vertical"
         size_hint: 1,1
         canvas:
             Color:
@@ -22,11 +23,27 @@
             Rectangle:
                 size: self.size
                 pos: self.pos
+
+        Label:
+            text:"Transaction number: "
+            #size_hint:0.2, 0.2
+        TextInput:
+            id:Trans_number
+            multiline:False
+            # size_hint:0.2, 0.2
         
-    #     # Button:
-    #     #     text: "Read QR"
-    #     #     size_hint: None, None
-    #     #     size: 200, 50
+        Label:
+            text:"Insert QR code: "
+            #size_hint:0.2, 0.2
+        TextInput:
+            id:Trans_number
+            multiline:False
+            # size_hint:0.2, 0.2
+        Button:
+            text: "PRINT"
+            size_hint: None, None
+            size: 200, 50
+            on_press:root.print()
             
 
     BoxLayout:
