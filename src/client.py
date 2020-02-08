@@ -16,7 +16,11 @@ from services.camera_service import PicameraControl
 
 cam = PicameraControl()
 cam.preview(5)
+<<<<<<< HEAD
 cam.stop_recordingvideo
+=======
+cam = PicameraControl()
+>>>>>>> ca4586e69028fd8ac0f8f0e1eea7d18a8472773d
 cam.start_video("video_prueba.h264")
 time.sleep(5)
 cam.stop_recordingvideo()

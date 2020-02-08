@@ -60,7 +60,11 @@ class ReceiptHeader(PrintPaper):
 
         self.printer.set()
         self.printer._raw("\n\n")
+<<<<<<< HEAD
         self.printer.qr("www.lotopunto.com", size=6, ec=3, center=True)
+=======
+        #self.printer.qr("www.lotopunto.com") #, size=6)
+>>>>>>> ca4586e69028fd8ac0f8f0e1eea7d18a8472773d
         rsume_time= time.time() + 0.3
         while (time.time() - rsume_time) < 0: pass
 
