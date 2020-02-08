@@ -38,7 +38,7 @@ class ReceiptHeader(PrintPaper):
         self.printer.set(font='a', height=1, align='center')
         self.printer._raw("BBI COLOMBIA S.A.S NIT: XXXXXXXXXXXXXXXXXXXXXXXXXXXXX \n Somos agentes retenedores de IVA \n direccion:xxxxx \n INVOICE: {} \n\n\n".format(str(self.transaction_number)))
         self.printer._raw("------------------------------------------------\n")
-    def print_description(self, data):
+    def print_description(self, data, qr_code):
         
         total = 0
         tax = 6
@@ -60,13 +60,10 @@ class ReceiptHeader(PrintPaper):
 
         self.printer.set()
         self.printer._raw("\n\n")
-<<<<<<< HEAD
-        self.printer.qr("www.lotopunto.com", size=6, ec=3, center=True)
-=======
-        #self.printer.qr("www.lotopunto.com") #, size=6)
->>>>>>> ca4586e69028fd8ac0f8f0e1eea7d18a8472773d
-        rsume_time= time.time() + 0.3
-        while (time.time() - rsume_time) < 0: pass
+        if qr_code:
+            self.printer.qr(qr_code, size=6)
+            rsume_time= time.time() + 0.3
+            while (time.time() - rsume_time) < 0: pass
 
     def print_bottom(self, data):
         self.printer._raw("------------------------------------------------\n")
