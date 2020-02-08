@@ -60,7 +60,7 @@ class ReceiptHeader(PrintPaper):
 
         self.printer.set()
         self.printer._raw("\n\n")
-        self.printer.qr("www.lotopunto.com", size=6)
+        self.printer.qr("www.lotopunto.com", size=6, ec=3, center=True)
         rsume_time= time.time() + 0.3
         while (time.time() - rsume_time) < 0: pass
 
@@ -71,28 +71,7 @@ class ReceiptHeader(PrintPaper):
 
         self.printer.cut()
 
-class ReceiptDescription(PrintPaper):
 
-    def __init__(self, description_type, text, data):
-        self.description_type = description_type
-        self.text = text
-        self.data = data
-        PrintPaper.__init__(self)
-
-    def print_description(self):
-        # self.printer.set(font='a', height=2, align='center')
-        for i in self.data:
-            print("i", i)
-            self.printer._raw("{}     {}      {}      {}\n".format(i[0], i[1], i[2], i[3]))
-
-        self.printer.set()
-        self.printer._raw("\n\n")
-        self.printer.qr("www.google.com", size=6)
-        self.printer.qr("www.google.com", size=8)
-        self.printer.qr("www.google.com", size=10)
-        self.printer.qr("www.google.com", size=12)
-        self.printer.qr("www.google.com", size=14)
-        self.printer.cut()
 
 
 

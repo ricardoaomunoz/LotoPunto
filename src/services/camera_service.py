@@ -17,7 +17,7 @@ class PicameraControl(object):
         self.picx.start_preview()
         time.sleep(preview_time)
         self.picx.stop_preview()
-        self.picx.close()
+        # self.picx.close()
 
     def take_picture(self, path):
         self.picx.resolution = (2592, 1944)
@@ -35,6 +35,9 @@ class PicameraControl(object):
     def stop_recordingvideo(self):
         self.picx.stop_recording()
         self.picx.stop_preview()
+        self.picx.close()
+
+    def close(self):
         self.picx.close()
 
     def read_code(self):
@@ -81,6 +84,8 @@ class PicameraControl(object):
                 find = True
                 read_ready = False
             time.sleep(0.1)
+            # show the output frame
+            cv2.imshow("Barcode Scanner", frame)
 
         return ([find, data, tipo])
 

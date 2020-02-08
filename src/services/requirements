@@ -1,3 +1,14 @@
+sudo pip3 install pyusb
+sudo pip3 install escpos
+pip3 install qrcode
+
+
+
+
+
+
+
+
 ## ZBar library is used together with OpenCV to scan and decode barcodes an QR codes
 https://www.pyimagesearch.com/2018/05/21/an-opencv-barcode-and-qr-code-scanner-with-zbar/2
 
