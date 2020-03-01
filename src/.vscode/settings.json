@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "sspcoms.h": "c",
-        "ssp_helpers.h": "c"
+        "ssp_helpers.h": "c",
+        "string": "cpp"
     }
 }

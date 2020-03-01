@@ -233,6 +233,10 @@ void run_validator(SSP_COMMAND *sspC)
 
 int main()
 {
+    cpp_redis::client client;
+
+    client.connect();
+
     int ssp_address;
     SSP_COMMAND sspC;
 

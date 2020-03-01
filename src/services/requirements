@@ -37,3 +37,9 @@ https://blog.piwheels.org/how-to-work-out-the-missing-dependencies-for-a-python-
 
 
 sudo apt install libatlas3-base
+
+
+
+
+### install docker ####
+curl -fsSL get.docker.com -o get-docker.sh && sh get-docker.sh
