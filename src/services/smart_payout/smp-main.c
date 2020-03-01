@@ -1,10 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
+// #define RASPBERRY 1
+
+#ifdef RASPBERRY
+#include "../../../../ITLSSPLinux.tar/ITLSSPLinux/inc/SSPComs.h"
+#include "../../../../ITLSSPLinux.tar/ITLSSPLinux/BasicValidator6/port_linux.h"
+#include "../../../../ITLSSPLinux.tar/ITLSSPLinux/BasicValidator6/ssp_helpers.h"
+#else
 #include "../../../SSP_lib/V_1_6/ITLSSPLinux/inc/SSPComs.h"
 #include "../../../SSP_lib/V_1_6/ITLSSPLinux/BasicValidator6/port_linux.h"
 #include "../../../SSP_lib/V_1_6/ITLSSPLinux/BasicValidator6/ssp_helpers.h"
-
-
+#endif
 // pase the validators response to the poll command. the SSP_POLL_DATA6 structure has an
 // array of structures which contain values and country codes
 void parse_poll(SSP_COMMAND *sspC, SSP_POLL_DATA6 * poll)

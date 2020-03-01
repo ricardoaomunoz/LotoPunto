@@ -1,8 +1,9 @@
 #include "ssp_helpers.h"
 
-#ifdef WIN32
-#include "port_win32.h"
-#include "port_win32_ssp.h"
+// #define RASPBERRY 1
+
+#ifdef RASPBERRY
+#include "../../../../ITLSSPLinux.tar/ITLSSPLinux/inc/SSPComs.h"
 #else
 #include "../../../SSP_lib/V_1_6/ITLSSPLinux/inc/SSPComs.h"
 #endif

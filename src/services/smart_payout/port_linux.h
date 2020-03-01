@@ -5,9 +5,13 @@
 #error "Multiple ports included"
 #endif
 #define INCLUDED_PORT
+// #define RASPBERRY 1
 
+#ifdef RASPBERRY
+#include "../../../../ITLSSPLinux.tar/ITLSSPLinux/inc/SSPComs.h"
+#else
 #include "../../../SSP_lib/V_1_6/ITLSSPLinux/inc/SSPComs.h"
-
+#endif
 // Linux does not need to do any initialisation for the SSP library
 #define init_lib()
 
