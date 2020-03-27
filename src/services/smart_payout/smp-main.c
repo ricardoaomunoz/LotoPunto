@@ -11,7 +11,8 @@
 #include <netinet/in.h> 
 #include <signal.h>
   
-#define PORT     8080 
+#define CLIENT_PORT     8080 
+#define SERVER_PORT     8081 
 #define MAXLINE 1024 
 // #define RASPBERRY 1
 
@@ -20,32 +21,24 @@
 #include "../../../../ITLSSPLinux.tar/ITLSSPLinux/BasicValidator6/port_linux.h"
 #include "../../../../ITLSSPLinux.tar/ITLSSPLinux/BasicValidator6/ssp_helpers.h"
 #else
-#include "../../../SSP_lib/V_1_6/ITLSSPLinux/inc/SSPComs.h"
-#include "../../../SSP_lib/V_1_6/ITLSSPLinux/BasicValidator6/port_linux.h"
-#include "../../../SSP_lib/V_1_6/ITLSSPLinux/BasicValidator6/ssp_helpers.h"
+#include "../../../ITLSSPLinux/inc/SSPComs.h"
+#include "../../../ITLSSPLinux/BasicValidator6/port_linux.h"
+#include "../../../ITLSSPLinux/BasicValidator6/ssp_helpers.h"
 #endif
 // pase the validators response to the poll command. the SSP_POLL_DATA6 structure has an
 // array of structures which contain values and country codes
 
 
 
-void do_action(SSP_COMMAND *sspC, int sockfd, struct sockaddr_in servaddr, struct sockaddr_in cliaddr, 
-	char buffer[MAXLINE])
-{    
-	struct timeval read_timeout;
-	read_timeout.tv_sec = 0;
-	read_timeout.tv_usec = 10; 
+void do_action(SSP_COMMAND *sspC, int sockfd, struct sockaddr_in cliaddr, struct sockaddr_in servaddr)
+{
+	char buffer[MAXLINE];
+	char msg[256];
 
-    int len, n, siz; 
+    int len, n; 
   
     len = sizeof(cliaddr);  //len is value/resuslt 
-	setsockopt(sockfd, SOL_SOCKET, SO_RCVTIMEO, &read_timeout, sizeof read_timeout);
-	// if ( bind(sockfd, (const struct sockaddr *)&servaddr,  
-    //         sizeof(servaddr)) < 0 ) 
-    // { 
-    //     perror("bind failed"); 
-    //     exit(EXIT_FAILURE); 
-    // } 
+	 
 
 	n = recvfrom(sockfd, (char *)buffer, MAXLINE,  
                 MSG_WAITALL, ( struct sockaddr *) &cliaddr, 
@@ -61,13 +54,17 @@ void do_action(SSP_COMMAND *sspC, int sockfd, struct sockaddr_in servaddr, struc
 			case 'p':// Make a payout
 			{
 				// ask the user for a value to payout
-				char *pay = ask(sspC, "Enter amount to pay");
+				// char *pay = ask(sspC, "Enter amount to pay");
+				printf("into p");
+				char *pay = "2000";
 				int amount = (int)(strtod(pay, NULL)*100);
-				free(pay);
+				// free(pay);
+				printf("into p");
 				
 				if (amount > 0) {
 					// ask the user what currency to payout in
-					char *cc = ask(sspC, "Enter payout curency");
+					// char *cc = ask(sspC, "Enter payout curency");
+					char *cc = "COP";
 
 					// send the payout command
 					if (ssp6_payout(sspC, amount, cc, SSP6_OPTION_BYTE_DO) != SSP_RESPONSE_OK){
@@ -163,12 +160,13 @@ void do_action(SSP_COMMAND *sspC, int sockfd, struct sockaddr_in servaddr, struc
 			{
 				char *cc;
 				// ask the user what value to route to the cashbox
-				char *pay = ask(sspC, "Enter value to route to cashbox");
+				// char *pay = ask(sspC, "Enter value to route to cashbox");
+				char *pay = "1000";
 				int amount = (int)(strtod(pay, NULL)*100);
 				free(pay);
 				
 				// ask the user what currency this value is
-				cc = ask(sspC, "Enter curency");
+				// cc = ask(sspC, "Enter curency");
 	
 				// send the route command
 				if (ssp6_set_route(sspC, amount, cc, 0x01) != SSP_RESPONSE_OK){
@@ -183,12 +181,13 @@ void do_action(SSP_COMMAND *sspC, int sockfd, struct sockaddr_in servaddr, struc
 			{
 				char *cc;
 				// ask the user what value to route to storage
-				char *pay = ask(sspC, "Enter value to route to storage.");
+				// char *pay = ask(sspC, "Enter value to route to storage.");
+				char *pay = "5000";
 				long amount = (int)(strtod(pay, NULL)*100);
 				free(pay);
 				
 				// ask the user what currency this value is
-				cc = ask(sspC, "Enter curency");
+				// cc = ask(sspC, "Enter curency");
 
 				
 				// send the route command
@@ -210,7 +209,6 @@ void do_action(SSP_COMMAND *sspC, int sockfd, struct sockaddr_in servaddr, struc
 			    }
 			    if (setup_req.UnitType != 0x07) {
 				    printf ("Payout next note is only valid for NV11\n");
-	                print_help();
 	                break;
 			    }
 			    
@@ -231,7 +229,7 @@ void do_action(SSP_COMMAND *sspC, int sockfd, struct sockaddr_in servaddr, struc
 			    }
 			    if (setup_req.UnitType != 0x07) {
 				    printf ("Stack next note is only valid for NV11\n");
-	                print_help();
+	                // print_help();
 	                break;
 			    }
 			    
@@ -241,7 +239,18 @@ void do_action(SSP_COMMAND *sspC, int sockfd, struct sockaddr_in servaddr, struc
 			    }
 			}
 				break;
+			case 'h': // disable the payout device
+			{
+				snprintf(msg, sizeof msg, "no messages\n");
+				printf("no messages");
+			}
+				
+				break;
+				
 	}
+	sendto(sockfd, (const char *)msg, strlen(msg), 
+        MSG_CONFIRM, (const struct sockaddr *) &servaddr,  
+            sizeof(servaddr));
 	// #####################################################3
 
 	
@@ -280,8 +289,6 @@ void parse_poll(SSP_COMMAND *sspC, SSP_POLL_DATA6 *poll, int sockfd, struct sock
 			
 			snprintf(msg, sizeof msg, "Credit %ld %s\n", poll->events[i].data1, poll->events[i].cc);
 			printf("Credit %ld %s\n", poll->events[i].data1, poll->events[i].cc);
-			
-    printf("Hello message sent.\n");
 			break;
 		case SSP_POLL_INCOMPLETE_PAYOUT:
 			// the validator shutdown during a payout, this event is reporting that some value remains to payout
@@ -307,7 +314,7 @@ void parse_poll(SSP_COMMAND *sspC, SSP_POLL_DATA6 *poll, int sockfd, struct sock
 			break;
 		case SSP_POLL_STACKED:
 			// The note has been stacked in the cashbox
-			snprintf(msg, sizeof msg, "Stacked\n", poll->events[i].data1, poll->events[i].data2, poll->events[i].cc);
+			snprintf(msg, sizeof msg, "Stacked\n");
 			
 			printf("Stacked\n");
 			break;
@@ -382,131 +389,146 @@ void parse_poll(SSP_COMMAND *sspC, SSP_POLL_DATA6 *poll, int sockfd, struct sock
 void run_validator(SSP_COMMAND *sspC)
 {
 	int sockfd; 
-	char buffer[MAXLINE];
 	
 
 	SSP_POLL_DATA6 poll;
 	SSP6_SETUP_REQUEST_DATA setup_req;
 	unsigned int i = 0;
-	struct sockaddr_in servaddr, cliaddr; 
+	struct sockaddr_in servaddr, cliaddr;
+	struct timeval read_timeout;
+	read_timeout.tv_sec = 0;
+	read_timeout.tv_usec = 10; 
       
     // Creating socket file descriptor 
     if ( (sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0 ) { 
         perror("socket creation failed"); 
         exit(EXIT_FAILURE); 
     } 
+	setsockopt(sockfd, SOL_SOCKET, SO_RCVTIMEO, &read_timeout, sizeof read_timeout);
+     
       
     memset(&servaddr, 0, sizeof(servaddr)); 
     memset(&cliaddr, 0, sizeof(cliaddr));
 	// Filling server information 
     servaddr.sin_family    = AF_INET; // IPv4 
     servaddr.sin_addr.s_addr = INADDR_ANY; 
-    servaddr.sin_port = htons(PORT); 
+    servaddr.sin_port = htons(CLIENT_PORT); 
+
+    cliaddr.sin_family    = AF_INET; // IPv4 
+    cliaddr.sin_addr.s_addr = INADDR_ANY; 
+    cliaddr.sin_port = htons(SERVER_PORT); 
+
+	if ( bind(sockfd, (const struct sockaddr *)&cliaddr,  
+            sizeof(cliaddr)) < 0 ) 
+    { 
+        perror("bind failed"); 
+        exit(EXIT_FAILURE); 
+    }
 
 
 
-	//check validator is present
-	if (ssp6_sync(sspC) != SSP_RESPONSE_OK)
-	{
-		printf("NO VALIDATOR FOUND\n");
-		return;
-	}
-	printf("Validator Found\n");
+	// // //check validator is present
+	// // if (ssp6_sync(sspC) != SSP_RESPONSE_OK)
+	// // {
+	// // 	printf("NO VALIDATOR FOUND\n");
+	// // 	return;
+	// // }
+	// // printf("Validator Found\n");
 
-	//try to setup encryption using the default key
-	if (ssp6_setup_encryption(sspC, (unsigned long long)0x123456701234567LL) != SSP_RESPONSE_OK)
-		printf("Encryption Failed\n");
-	else
-		printf("Encryption Setup\n");
+	// // //try to setup encryption using the default key
+	// // if (ssp6_setup_encryption(sspC, (unsigned long long)0x123456701234567LL) != SSP_RESPONSE_OK)
+	// // 	printf("Encryption Failed\n");
+	// // else
+	// // 	printf("Encryption Setup\n");
 
-	// Make sure we are using ssp version 6
-	if (ssp6_host_protocol(sspC, 0x06) != SSP_RESPONSE_OK)
-	{
-		printf("Host Protocol Failed\n");
-		return;
-	}
+	// // // Make sure we are using ssp version 6
+	// // if (ssp6_host_protocol(sspC, 0x06) != SSP_RESPONSE_OK)
+	// // {
+	// // 	printf("Host Protocol Failed\n");
+	// // 	return;
+	// // }
 
-	// Collect some information about the validator
-	if (ssp6_setup_request(sspC, &setup_req) != SSP_RESPONSE_OK)
-	{
-		printf("Setup Request Failed\n");
-		return;
-	}
-	printf("Firmware: %s\n", setup_req.FirmwareVersion);
-	printf("Channels:\n");
-	for (i = 0; i < setup_req.NumberOfChannels; i++)
-	{
-		printf("channel %d: %d %s\n", i + 1, setup_req.ChannelData[i].value, setup_req.ChannelData[i].cc);
-	}
+	// // // Collect some information about the validator
+	// // if (ssp6_setup_request(sspC, &setup_req) != SSP_RESPONSE_OK)
+	// // {
+	// // 	printf("Setup Request Failed\n");
+	// // 	return;
+	// // }
+	// // printf("Firmware: %s\n", setup_req.FirmwareVersion);
+	// // printf("Channels:\n");
+	// // for (i = 0; i < setup_req.NumberOfChannels; i++)
+	// // {
+	// // 	printf("channel %d: %d %s\n", i + 1, setup_req.ChannelData[i].value, setup_req.ChannelData[i].cc);
+	// // }
 
-	//enable the validator
-	if (ssp6_enable(sspC) != SSP_RESPONSE_OK)
-	{
-		printf("Enable Failed\n");
-		return;
-	}
+	// // //enable the validator
+	// // if (ssp6_enable(sspC) != SSP_RESPONSE_OK)
+	// // {
+	// // 	printf("Enable Failed\n");
+	// // 	return;
+	// // }
 
-	if (setup_req.UnitType == 0x03)
-	{
-		// SMART Hopper requires different inhibit commands
-		for (i = 0; i < setup_req.NumberOfChannels; i++)
-		{
-			ssp6_set_coinmech_inhibits(sspC, setup_req.ChannelData[i].value, setup_req.ChannelData[i].cc, ENABLED);
-		}
-	}
-	else
-	{
-		if (setup_req.UnitType == 0x06 || setup_req.UnitType == 0x07)
-		{
-			//enable the payout unit
-			if (ssp6_enable_payout(sspC, setup_req.UnitType) != SSP_RESPONSE_OK)
-			{
-				printf("Enable Failed\n");
-				return;
-			}
-		}
+	// // if (setup_req.UnitType == 0x03)
+	// // {
+	// // 	// SMART Hopper requires different inhibit commands
+	// // 	for (i = 0; i < setup_req.NumberOfChannels; i++)
+	// // 	{
+	// // 		ssp6_set_coinmech_inhibits(sspC, setup_req.ChannelData[i].value, setup_req.ChannelData[i].cc, ENABLED);
+	// // 	}
+	// // }
+	// // else
+	// // {
+	// // 	if (setup_req.UnitType == 0x06 || setup_req.UnitType == 0x07)
+	// // 	{
+	// // 		//enable the payout unit
+	// // 		if (ssp6_enable_payout(sspC, setup_req.UnitType) != SSP_RESPONSE_OK)
+	// // 		{
+	// // 			printf("Enable Failed\n");
+	// // 			return;
+	// // 		}
+	// // 	}
 
-		// set the inhibits (enable all note acceptance)
-		if (ssp6_set_inhibits(sspC, 0xFF, 0xFF) != SSP_RESPONSE_OK)
-		{
-			printf("Inhibits Failed\n");
-			return;
-		}
-	}
+	// // 	// set the inhibits (enable all note acceptance)
+	// // 	if (ssp6_set_inhibits(sspC, 0xFF, 0xFF) != SSP_RESPONSE_OK)
+	// // 	{
+	// // 		printf("Inhibits Failed\n");
+	// // 		return;
+	// // 	}
+	// // }
 
 	while (1)
 	{
 		//poll the unit
-		SSP_RESPONSE_ENUM rsp_status;
-		if ((rsp_status = ssp6_poll(sspC, &poll)) != SSP_RESPONSE_OK)
-		{
-			if (rsp_status == SSP_RESPONSE_TIMEOUT)
-			{
-				// If the poll timed out, then give up
-				printf("SSP Poll Timeout\n");
-				return;
-			}
-			else
-			{
-				if (rsp_status == 0xFA)
-				{
-					// The validator has responded with key not set, so we should try to negotiate one
-					if (ssp6_setup_encryption(sspC, (unsigned long long)0x123456701234567LL) != SSP_RESPONSE_OK)
-						printf("Encryption Failed\n");
-					else
-						printf("Encryption Setup\n");
-				}
-				else
-				{
-					printf("SSP Poll Error: 0x%x\n", rsp_status);
-				}
-			}
-		}
+		// // SSP_RESPONSE_ENUM rsp_status;
+		// // if ((rsp_status = ssp6_poll(sspC, &poll)) != SSP_RESPONSE_OK)
+		// // {
+		// // 	if (rsp_status == SSP_RESPONSE_TIMEOUT)
+		// // 	{
+		// // 		// If the poll timed out, then give up
+		// // 		printf("SSP Poll Timeout\n");
+		// // 		return;
+		// // 	}
+		// // 	else
+		// // 	{
+		// // 		if (rsp_status == 0xFA)
+		// // 		{
+		// // 			// The validator has responded with key not set, so we should try to negotiate one
+		// // 			if (ssp6_setup_encryption(sspC, (unsigned long long)0x123456701234567LL) != SSP_RESPONSE_OK)
+		// // 				printf("Encryption Failed\n");
+		// // 			else
+		// // 				printf("Encryption Setup\n");
+		// // 		}
+		// // 		else
+		// // 		{
+		// // 			printf("SSP Poll Error: 0x%x\n", rsp_status);
+		// // 		}
+		// // 	}
+		// // }
 
 		// printf("doing parse...");
 		parse_poll(sspC, &poll, sockfd, servaddr);
 		// printf("doing action...");
-		do_action(sspC, sockfd, servaddr, cliaddr, buffer);
+		do_action(sspC, sockfd, cliaddr, servaddr);
 		// printf("doing action...");
 		// do_action(sspC);
 		usleep(500000); //500 ms delay between polls
@@ -533,12 +555,12 @@ int main()
 	
 
 	printf("##%s##\n", port_c);
-	if (open_ssp_port(port_c) == 0)
-	{
-		// Do something with this error ##############
-		printf("Port Error\n");
-		return 1;
-	}
+	// if (open_ssp_port(port_c) == 0)
+	// {
+	// 	// Do something with this error ##############
+	// 	printf("Port Error\n");
+	// 	return 1;
+	// }
 
 	//run the validator
 

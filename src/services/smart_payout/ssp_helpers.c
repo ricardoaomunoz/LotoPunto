@@ -5,7 +5,7 @@
 #ifdef RASPBERRY
 #include "../../../../ITLSSPLinux.tar/ITLSSPLinux/inc/SSPComs.h"
 #else
-#include "../../../SSP_lib/V_1_6/ITLSSPLinux/inc/SSPComs.h"
+#include "../../../ITLSSPLinux/inc/SSPComs.h"
 #endif
 
 static SSP_RESPONSE_ENUM _ssp_return_values(SSP_COMMAND * sspC)

@@ -57,7 +57,7 @@ Release_target : CFLAGS += -O2  -Os -g -O0
 Release_target : INCLUDES += 
 Release_target : RCFLAGS += 
 Release_target : LDFLAGS += -s   
-Release_target : T_LDLIBS = ../../../SSP_lib/V_1_6/ITLSSPLinux/lib/bin/libitlssp.a 
+Release_target : T_LDLIBS = ../../../ITLSSPLinux/lib/bin/libitlssp.a 
 # Release_target : T_LDLIBS = ../../../../ITLSSPLinux.tar/ITLSSPLinux/lib/bin/libitlssp.a 
 ifdef LMAKE
 Release_target : CFLAGS -= -O1 -O2 -g -pipe
