@@ -12,91 +12,184 @@
             size:self.size
             pos: self.pos
 
-    qr_label: QrRead
-    BoxLayout:
-        orientation: "vertical"
-        size_hint: 1,1
+    qr_read_label: QrRead
+    transaction_number_label: TransactionNumber
+    set_qr_label: SetQr
+
+
+    FloatLayout:
+        size_hint: 0.4,0.9
+        pos_hint: {'x':0.05,'y':0.05}
         canvas:
             Color:
-                rgb: 1,0,0
-        
+                rgb:0.4,0.4,0.3
             Rectangle:
-                size: self.size
+                size:self.size
                 pos: self.pos
 
-        Label:
-            text:"Transaction number: "
-            #size_hint:0.2, 0.2
-        TextInput:
-            id:Trans_number
-            multiline:False
-            # size_hint:0.2, 0.2
-        
-        Label:
-            text:"Insert QR code: "
-            #size_hint:0.2, 0.2
-        TextInput:
-            id:Trans_number
-            multiline:False
-            # size_hint:0.2, 0.2
         Button:
-            text: "PRINT"
-            size_hint: None, None
-            size: 200, 50
-            on_press:root.print()
-            
+            size_hint: 0.4,None #2% de la pantalla en 'x' y en 'y' se cancela
+            height: self.width/4  # El alto va a ser un cuarto del ancho
+            pos_hint: {'x':0.3,'y':0.2} #pos en x al 20% y de y al 20%
+            text: "Print Receipt"
+            on_press:root.print_receipt()
 
-    BoxLayout:
-        orientation: "vertical"
-        size_hint: 1,1
+        Label:
+            size_hint:0.55,None #2% de la pantalla en 'x' y en 'y' se cancela
+            height: self.width/4
+            pos_hint: {'x':0.05,'y':0.6}
+            text: "Insert Transaction number: "
+
+        TextInput:
+            id:TransactionNumber
+            size_hint:0.6,None #2% de la pantalla en 'x' y en 'y' se cancela
+            height: self.width/4
+            pos_hint: {'x':0.1,'y':0.5}
+
+        Label:
+            size_hint:0.55,None #2% de la pantalla en 'x' y en 'y' se cancela
+            height: self.width/4
+            pos_hint: {'x':0.05,'y':0.4}
+            text: "Insert code to convert to QR: "
+
+        TextInput:
+            id:SetQr
+            size_hint:0.6,None #2% de la pantalla en 'x' y en 'y' se cancela
+            height: self.width/4
+            pos_hint: {'x':0.1,'y':0.3}
+
+
+        
+
+    FloatLayout:
+        size_hint: 0.4,0.9
+        pos_hint: {'x':0.55,'y':0.05}
         canvas:
             Color:
-                rgb: 0,0,1
+                rgb:0.4,0.4,0.3
             Rectangle:
-                size: self.size
+                size:self.size
                 pos: self.pos
-        
-            
-        BoxLayout:
-            size_hint: 1,1
-            canvas:
-                Color:
-                    rgba:1,1,1,.5
-                Rectangle:
-                    size: self.size
-                    pos: self.pos
-            Button:
-                text: "Read QR"
-                size_hint: None, None
-                size: 400, 50
-                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-                on_press:root.btn()
 
-        BoxLayout:
-            orientation: "vertical"
-            size_hint: 1,1
-            canvas:
-                Color:
-                    rgba:1,1,1,.4
-                Rectangle:
-                    size: self.size
-                    pos: self.pos
-            Label:
-                text:"Text Read.."
-                #size_hint:0.2, 0.2
+        Label:
+            size_hint:0.4,None #2% de la pantalla en 'x' y en 'y' se cancela
+            height: self.width/4
+            pos_hint: {'x':0.05,'y':0.4}
+            text: "Text read: "
 
-            TextInput:
-                id:QrRead
-                multiline:False
-                # size_hint:0.2, 0.2
+        TextInput:
+            id:QrRead
+            size_hint:0.6,None #2% de la pantalla en 'x' y en 'y' se cancela
+            height: self.width/4
+            pos_hint: {'x':0.1,'y':0.3}
 
 
-    # GridLayout:
-    #     color:1,0,0,0
-    #     id: principal
-    #     cols:2
-    #     size: root.width - 100, root.height - 100
-    #     pos: 50, 50
+
+        Button:
+            size_hint: 0.4,None #2% de la pantalla en 'x' y en 'y' se cancela
+            height: self.width/4
+            pos_hint: {'x':0.3,'y':0.2}
+            text: "Read Qr Code"
+            on_press:root.read_qr()
+
+    
+    
+
+    
+
+
+
+    # Button:
+    #     size_hint: 0.08,None
+    #     height: self.width
+    #     pos_hint: {'x':0.4,'y':0.2}
+    #     text: "Print Receipt"
+
+#    qr_label: QrRead
+#    BoxLayout:
+#        orientation: "vertical"
+#        size_hint: 1,1
+#        canvas:
+#            Color:
+#                rgb: 1,0,0
+#        
+#            Rectangle:
+#                size: self.size
+#                pos: self.pos
+#
+#        Label:
+#            text:"Transaction number: "
+#            #size_hint:0.2, 0.2
+#        TextInput:
+#            id:Trans_number
+#            multiline:False
+#            # size_hint:0.2, 0.2
+#        
+#        Label:
+#            text:"Insert QR code: "
+#            #size_hint:0.2, 0.2
+#        TextInput:
+#            id:Trans_number
+#            multiline:False
+#            # size_hint:0.2, 0.2
+#        Button:
+#            text: "PRINT"
+#            size_hint: None, None
+#            size: 200, 50
+#            on_press:root.print()
+#            
+#
+#    BoxLayout:
+#        orientation: "vertical"
+#        size_hint: 1,1
+#        canvas:
+#            Color:
+#                rgb: 0,0,1
+#            Rectangle:
+#                size: self.size
+#                pos: self.pos
+#        
+#            
+#        BoxLayout:
+#            size_hint: 1,1
+#            canvas:
+#                Color:
+#                    rgba:1,1,1,.5
+#                Rectangle:
+#                    size: self.size
+#                    pos: self.pos
+#            Button:
+#                text: "Read QR"
+#                size_hint: None, None
+#                size: 400, 50
+#                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+#                on_press:root.btn()
+#
+#        BoxLayout:
+#            orientation: "vertical"
+#            size_hint: 1,1
+#            canvas:
+#                Color:
+#                    rgba:1,1,1,.4
+#                Rectangle:
+#                    size: self.size
+#                    pos: self.pos
+#            Label:
+#                text:"Text Read.."
+#                #size_hint:0.2, 0.2
+#
+#            TextInput:
+#                id:QrRead
+#                multiline:False
+#                # size_hint:0.2, 0.2
+#
+#
+#    # GridLayout:
+#    #     color:1,0,0,0
+#    #     id: principal
+#    #     cols:2
+#    #     size: root.width - 100, root.height - 100
+#    #     pos: 50, 50
 
 
     #     GridLayout:

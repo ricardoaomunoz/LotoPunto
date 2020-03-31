@@ -43,6 +43,26 @@ SSP_RESPONSE_ENUM ssp6_payout(SSP_COMMAND *sspC, const int value, const char *cc
     resp = _ssp_return_values(sspC);
     return resp;
 }
+SSP_RESPONSE_ENUM ssp6_get_value_level(SSP_COMMAND *sspC, const int value, const char *cc)
+{
+    SSP_RESPONSE_ENUM resp;
+    int i;
+
+    sspC->CommandDataLength = 8;
+    sspC->CommandData[0] = SSP_CMD_GET_COIN_AMOUNT;
+
+    for (i=0; i<4; i++)
+		sspC->CommandData[i+1] = value >> (i*8);
+		
+	for (i=0; i<3; i++)
+		sspC->CommandData[i+5] = cc[i];
+    
+
+    
+    resp = _ssp_return_values(sspC);
+    return resp;
+
+}
 
 // Send an SSP payout command (0x33)
 SSP_RESPONSE_ENUM ssp6_set_route(SSP_COMMAND *sspC, const int value, const char *cc, const char route)

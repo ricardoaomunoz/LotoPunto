@@ -1,10 +1,32 @@
 import asyncio
 import json
 import websockets
-from services.udp_write_payout import UDPPORT
+import sys
+import socket 
+import time
+# insert at 1, 0 is the script path (or '' in REPL)
+# sys.path.insert(1, '/home/ricardo/Loto_Punto/src/service/')
+# from udp_write_payout import UDPPORT
+# from services.udp_write_payout import UDPPORT
 
 USERS = set()
 MONEY = {"value": 0}
+readPort = 8080
+writePort = 8081
+localIP = "127.0.0.1"
+bufferSize = 1024
+
+
+
+
+class UDPPORT():
+    def __init__(self):
+        self.UDPServerSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
+
+    def WriteUDPport(self, message):
+        msg = str.encode(message)
+        self.UDPServerSocket.sendto(msg, (localIP, int(writePort)))    
+
 udpsock = UDPPORT()
 
 def money_insert_event():
@@ -37,7 +59,9 @@ async def unregister(websocket):
 async def smart_payout(websocket, path):
     await register(websocket)
     try:
-        await websocket.send(money_insert_event)
+        print(money_insert_event())
+        print(type(money_insert_event()))
+        await websocket.send(money_insert_event())
         async for message in websocket:
             data = json.loads(message)
             if data["action"] == "payout":
@@ -50,15 +74,12 @@ async def smart_payout(websocket, path):
                 channel = data["channel"]
                 route(channel, amount)
             elif data["action"] == "credit":
+                print("##### Credit action ...")
                 MONEY["value"] += int(data["amount"])
                 await notify_money()
-
-
-            
-
-                
-
+   
     finally:
+        print("Unregiste user....")
         await unregister(websocket)
 
 
