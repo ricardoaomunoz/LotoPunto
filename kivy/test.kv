@@ -1,8 +1,5 @@
-# <Button>:
-#     #size_hint: 0.3, 0.5
-#     height: 10
-#     font_size:20
-#     color:0.3,0.6,0.7,1
+
+
 <MyGrid>:
     spacing:30
     canvas:
@@ -15,11 +12,14 @@
     qr_read_label: QrRead
     transaction_number_label: TransactionNumber
     set_qr_label: SetQr
+    credit: Credit
+    payout_value: PayoutValue
+    payout_label: PayoutLabel
 
 
     FloatLayout:
-        size_hint: 0.4,0.9
-        pos_hint: {'x':0.05,'y':0.05}
+        size_hint: 0.45,0.4
+        pos_hint: {'x':0.03,'y':0.03}
         canvas:
             Color:
                 rgb:0.4,0.4,0.3
@@ -28,42 +28,37 @@
                 pos: self.pos
 
         Button:
-            size_hint: 0.4,None #2% de la pantalla en 'x' y en 'y' se cancela
-            height: self.width/4  # El alto va a ser un cuarto del ancho
-            pos_hint: {'x':0.3,'y':0.2} #pos en x al 20% y de y al 20%
+            size_hint: 0.4,0.1 #2% de la pantalla en 'x' y en 'y' se cancela
+            pos_hint: {'x':0.3,'y':0.05} #pos en x al 20% y de y al 20%
             text: "Print Receipt"
             on_press:root.print_receipt()
 
         Label:
-            size_hint:0.55,None #2% de la pantalla en 'x' y en 'y' se cancela
-            height: self.width/4
-            pos_hint: {'x':0.05,'y':0.6}
+            size_hint:0.55,0.1 #2% de la pantalla en 'x' y en 'y' se cancela
+            pos_hint: {'x':0.05,'y':0.5}
             text: "Insert Transaction number: "
 
         TextInput:
             id:TransactionNumber
-            size_hint:0.6,None #2% de la pantalla en 'x' y en 'y' se cancela
-            height: self.width/4
-            pos_hint: {'x':0.1,'y':0.5}
+            size_hint:0.6,0.1 #2% de la pantalla en 'x' y en 'y' se cancela
+            pos_hint: {'x':0.1,'y':0.4}
 
         Label:
-            size_hint:0.55,None #2% de la pantalla en 'x' y en 'y' se cancela
-            height: self.width/4
-            pos_hint: {'x':0.05,'y':0.4}
+            size_hint:0.55,0.1 #2% de la pantalla en 'x' y en 'y' se cancela
+            pos_hint: {'x':0.05,'y':0.3}
             text: "Insert code to convert to QR: "
 
         TextInput:
             id:SetQr
-            size_hint:0.6,None #2% de la pantalla en 'x' y en 'y' se cancela
-            height: self.width/4
-            pos_hint: {'x':0.1,'y':0.3}
+            size_hint:0.6,0.1 #2% de la pantalla en 'x' y en 'y' se cancela
+            pos_hint: {'x':0.1,'y':0.2}
 
 
         
 
     FloatLayout:
-        size_hint: 0.4,0.9
-        pos_hint: {'x':0.55,'y':0.05}
+        size_hint: 0.45,0.4
+        pos_hint: {'x':0.52,'y':0.03}
         canvas:
             Color:
                 rgb:0.4,0.4,0.3
@@ -91,6 +86,214 @@
             pos_hint: {'x':0.3,'y':0.2}
             text: "Read Qr Code"
             on_press:root.read_qr()
+
+
+    
+    FloatLayout:
+        size_hint: 0.94,0.5
+        pos_hint: {'x':0.03,'y':0.45}
+        canvas:
+            Color:
+                rgb:0.4,0.4,0.3
+            Rectangle:
+                size:self.size
+                pos: self.pos
+
+        Label:
+            size_hint:0.1,0.1 #2% de la pantalla en 'x' y en 'y' se cancela
+            pos_hint: {'x':0.05,'y':0.8}
+            text: "Credit: "
+        Label:
+            id:Credit
+            size_hint:0.1,0.1 #2% de la pantalla en 'x' y en 'y' se cancela
+            pos_hint: {'x':0.1,'y':0.8}
+            text: "$ 0"
+
+
+        TextInput:
+            id:PayoutValue
+            size_hint:0.25,0.1 #2% de la pantalla en 'x' y en 'y' se cancela
+            pos_hint: {'x':0.05,'y':0.3}
+        Button:
+            size_hint: 0.2,0.15 #2% de la pantalla en 'x' y en 'y' se cancela
+            pos_hint: {'x':0.05,'y':0.1}
+            text: "Make Payout"
+            on_press:root.make_payout()
+        Label:
+            id:PayoutLabel
+            size_hint: 0.3,0.1
+            pos_hint: {'x':0.05, 'y':0.4}
+            color:[255, 1, 1, 1]
+
+
+        Label:
+            size_hint: 0.1,0.05
+            pos_hint: {'x':0.4, 'y':0.9}
+            text: "Error messages"
+        TextInput:
+            id:ErrorMsg
+            size_hint:0.25,0.3 #2% de la pantalla en 'x' y en 'y' se cancela
+            pos_hint: {'x':0.4,'y':0.55}    
+
+        Label:
+            size_hint: 0.1,0.05
+            pos_hint: {'x':0.7, 'y':0.9}
+            text: "Alert messages"
+        TextInput:
+            id:AlertMsg
+            size_hint:0.25,0.3 #2% de la pantalla en 'x' y en 'y' se cancela
+            pos_hint: {'x':0.7,'y':0.55}   
+
+
+        Label:
+            size_hint: 0.1,0.05
+            pos_hint: {'x':0.4, 'y':0.45}
+            text: "Warning messages"
+        TextInput:
+            id:WarningMsg
+            size_hint:0.25,0.3 #2% de la pantalla en 'x' y en 'y' se cancela
+            pos_hint: {'x':0.4,'y':0.1} 
+
+
+        Label:
+            size_hint: 0.05,0.05
+            pos_hint: {'x':0.68, 'y':0.45}
+            text: "CH"
+
+        Label:
+            size_hint: 0.05,0.05
+            pos_hint: {'x':0.68, 'y':0.4}
+            text: "1"
+        Label:
+            size_hint: 0.05,0.05
+            pos_hint: {'x':0.68, 'y':0.34}
+            text: "2"
+        Label:
+            size_hint: 0.05,0.05
+            pos_hint: {'x':0.68, 'y':0.28}
+            text: "3"
+        Label:
+            size_hint: 0.05,0.05
+            pos_hint: {'x':0.68, 'y':0.22}
+            text: "4"
+        Label:
+            size_hint: 0.05,0.05
+            pos_hint: {'x':0.68, 'y':0.16}
+            text: "5"
+        Label:
+            size_hint: 0.05,0.05
+            pos_hint: {'x':0.68, 'y':0.10}
+            text: "6"
+
+        Label:
+            size_hint: 0.05,0.05
+            pos_hint: {'x':0.73, 'y':0.45}
+            text: "VALUE"
+
+        Label:
+            size_hint: 0.05,0.05
+            pos_hint: {'x':0.73, 'y':0.4}
+            text: "$1000"
+        Label:
+            size_hint: 0.05,0.05
+            pos_hint: {'x':0.73, 'y':0.34}
+            text: "$2000"
+        Label:
+            size_hint: 0.05,0.05
+            pos_hint: {'x':0.73, 'y':0.28}
+            text: "$5000"
+        Label:
+            size_hint: 0.05,0.05
+            pos_hint: {'x':0.73, 'y':0.22}
+            text: "$10000"
+        Label:
+            size_hint: 0.05,0.05
+            pos_hint: {'x':0.73, 'y':0.16}
+            text: "$20000"
+        Label:
+            size_hint: 0.05,0.05
+            pos_hint: {'x':0.73, 'y':0.10}
+            text: "$50000"
+
+        Label:
+            size_hint: 0.05,0.05
+            pos_hint: {'x':0.82, 'y':0.45}
+            text: "CUANTITY"
+        Label:
+            id:Q1
+            size_hint: 0.05,0.05
+            pos_hint: {'x':0.82, 'y':0.4}
+            text: "0"
+        Label:
+            id:Q2
+            size_hint: 0.05,0.05
+            pos_hint: {'x':0.82, 'y':0.34}
+            text: "0"
+        Label:
+            id:Q3
+            size_hint: 0.05,0.05
+            pos_hint: {'x':0.82, 'y':0.28}
+            text: "0"
+        Label:
+            id:Q4
+            size_hint: 0.05,0.05
+            pos_hint: {'x':0.82, 'y':0.22}
+            text: "0"
+        Label:
+            id:Q5
+            size_hint: 0.05,0.05
+            pos_hint: {'x':0.82, 'y':0.16}
+            text: "0"
+        Label:
+            id:Q6
+            size_hint: 0.05,0.05
+            pos_hint: {'x':0.82, 'y':0.10}
+            text: "0"
+
+        Label:
+            size_hint: 0.05,0.05
+            pos_hint: {'x':0.92, 'y':0.45}
+            text: "ROUTE"
+        Label:
+            id:R1
+            size_hint: 0.05,0.05
+            pos_hint: {'x':0.92, 'y':0.4}
+            text: "-"
+        Label:
+            id:R2
+            size_hint: 0.05,0.05
+            pos_hint: {'x':0.92, 'y':0.34}
+            text: "-"
+        Label:
+            id:R3
+            size_hint: 0.05,0.05
+            pos_hint: {'x':0.92, 'y':0.28}
+            text: "-"
+        Label:
+            id:R4
+            size_hint: 0.05,0.05
+            pos_hint: {'x':0.92, 'y':0.22}
+            text: "-"
+        Label:
+            id:R5
+            size_hint: 0.05,0.05
+            pos_hint: {'x':0.92, 'y':0.16}
+            text: "-"
+        Label:
+            id:R6
+            size_hint: 0.05,0.05
+            pos_hint: {'x':0.92, 'y':0.10}
+            text: "-"
+
+
+
+        
+        
+        
+
+
+
+            
 
     
     

@@ -15,6 +15,9 @@ class MyGrid(FloatLayout):
     qr_read_label = ObjectProperty(None)
     transaction_number_label = ObjectProperty(None)
     set_qr_label = ObjectProperty(None)
+    credit = ObjectProperty(None)
+    payout_value = ObjectProperty(None)
+    payout_label = ObjectProperty(None)
 
     def print_receipt(self):
         transaction_number = self.transaction_number_label.text
@@ -44,6 +47,9 @@ class MyGrid(FloatLayout):
         # else:
         #     text = "Fail Reading: " + str(read_from_qr[1])
         # self.qr_read_label.text = text
+
+    def  make_payout(self):
+        print("Make payout..")
 
 # class MyGrid(BoxLayout):
 #     qr_label = ObjectProperty(None)
