@@ -97,7 +97,10 @@ void do_action(SSP_COMMAND *sspC, int sockfd, struct sockaddr_in cliaddr, struct
 			case 'p':// Make a payout
 			{
 				int amount = 0;
-				amount = get_amount(buffer[1]);
+				printf("buffer1: %d\n", buffer[1]);
+				// printf("buffer1: %d\n", buffer[1]);
+				amount = buffer[1] * 100000;
+				// amount = get_amount(buffer[1]);
 				
 				printf("into p amount: %d \n", amount);
 				// char *pay = "2000";
@@ -169,7 +172,6 @@ void do_action(SSP_COMMAND *sspC, int sockfd, struct sockaddr_in cliaddr, struct
 					printf("value level: %d %d\n",amount, sspC->ResponseData[1]);
 	
 				}
-				free(cc);
 				} 
 
 			}
@@ -254,7 +256,6 @@ void do_action(SSP_COMMAND *sspC, int sockfd, struct sockaddr_in cliaddr, struct
 					printf("ERROR: Route to cashbox failed\n");
 					snprintf(msg, sizeof msg, "Error: Route to cashbox failed\n");
 				}
-				free(cc);
 
             }
             	break;
@@ -275,7 +276,6 @@ void do_action(SSP_COMMAND *sspC, int sockfd, struct sockaddr_in cliaddr, struct
 					printf("ERROR: Route to storage failed\n");
 					snprintf(msg, sizeof msg, "Error: Route to storage failed\n");
 				}
-				free(cc);
 
             }
             	break;
@@ -374,6 +374,11 @@ void parse_poll(SSP_COMMAND *sspC, SSP_POLL_DATA6 *poll, int sockfd, struct sock
 			snprintf(msg, sizeof msg, "Credit: %ld %s\n", poll->events[i].data1, poll->events[i].cc);
 			printf("Credit %ld %s\n", poll->events[i].data1, poll->events[i].cc);
 			break;
+		case SSP_POLL_DISPENSED:
+			snprintf(msg, sizeof msg, "Dispensed\n");
+			printf("Dispensed\n");
+			break;
+
 		case SSP_POLL_INCOMPLETE_PAYOUT:
 			// the validator shutdown during a payout, this event is reporting that some value remains to payout
 			printf("Warning: Incomplete payout %ld of %ld %s\n", poll->events[i].data1, poll->events[i].data2, poll->events[i].cc);
@@ -487,7 +492,7 @@ void run_validator(SSP_COMMAND *sspC)
 {
 	int sockfd; 
 	
-
+	char msg[256];
 	SSP_POLL_DATA6 poll;
 	SSP6_SETUP_REQUEST_DATA setup_req;
 	unsigned int i = 0;
@@ -528,6 +533,10 @@ void run_validator(SSP_COMMAND *sspC)
 	if (ssp6_sync(sspC) != SSP_RESPONSE_OK)
 	{
 		printf("NO VALIDATOR FOUND\n");
+		snprintf(msg, sizeof msg, "Error: NO VALIDATOR FOUND\n");
+		sendto(sockfd, (const char *)msg, strlen(msg), 
+        MSG_CONFIRM, (const struct sockaddr *) &servaddr,  
+            sizeof(servaddr));
 		return;
 	}
 	printf("Validator Found\n");
@@ -593,6 +602,10 @@ void run_validator(SSP_COMMAND *sspC)
 		}
 	}
 
+	snprintf(msg, sizeof msg, "Start\n");
+		sendto(sockfd, (const char *)msg, strlen(msg), 
+        MSG_CONFIRM, (const struct sockaddr *) &servaddr,  
+            sizeof(servaddr));
 	while (1)
 	{
 		//poll the unit
@@ -602,6 +615,10 @@ void run_validator(SSP_COMMAND *sspC)
 			if (rsp_status == SSP_RESPONSE_TIMEOUT)
 			{
 				// If the poll timed out, then give up
+				snprintf(msg, sizeof msg, "Error: SSP Poll Timeout\n");
+				sendto(sockfd, (const char *)msg, strlen(msg), 
+        		MSG_CONFIRM, (const struct sockaddr *) &servaddr,  
+        		    sizeof(servaddr));
 				printf("SSP Poll Timeout\n");
 				return;
 			}
@@ -617,6 +634,10 @@ void run_validator(SSP_COMMAND *sspC)
 				}
 				else
 				{
+					snprintf(msg, sizeof msg, "Error: SSP Poll Error: 0x%x\n", rsp_status);
+					sendto(sockfd, (const char *)msg, strlen(msg), 
+        			MSG_CONFIRM, (const struct sockaddr *) &servaddr,  
+        			    sizeof(servaddr));
 					printf("SSP Poll Error: 0x%x\n", rsp_status);
 				}
 			}

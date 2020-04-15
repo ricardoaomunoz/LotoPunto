@@ -25,6 +25,28 @@ def put_insert_money(cash):
         print(f"Error:{err}")
         pass
 
+def reset_credit():
+    try:
+        data = redis.get('money-insert')
+        if data:
+            data = json.loads(data)
+            data["credit"] = 0
+        else:
+            data = {
+                "inserted": 0,
+                "credit": 0,
+                "total": 0
+            }
+        data = json.dumps(data)
+        print(f"data to publish: {data}")
+        deliver = redis.publish('money-insert', data)
+        redis.set(name = 'money-insert', value = data)
+        print(f"delivered to {deliver}")
+    except Exception as err:
+        print(f"Error:{err}")
+        pass
+
+
 def put_message(msg, tipo):
     try:
         print("publish msg")
@@ -40,14 +62,19 @@ def put_message(msg, tipo):
 
 def put_value_level(ch, route, quantity):
     try:
-        print("publish value level")
+        print(f"publish value level {ch} {route} {quantity}")
         data = redis.get("value-level")
+        print(f"data from value-level: {data}")
         if data:
             data = json.loads(data)
             channel = "channel" + str(ch)
-            data[channel]["route"] = route
-            data[channel]["quantity"] = quantity
+            if channel in data:
+                data[channel][0]["route"] = route
+                data[channel][0]["quantity"] = quantity
+            else:
+                data[channel]=[{'route':route, 'quantity':quantity}]
         else:
+            channel = "channel" + str(ch)
             data = {
                 channel: [
                     {
@@ -64,3 +91,5 @@ def put_value_level(ch, route, quantity):
     except Exception as err:
         print(f"Error:{err}")
         pass
+
+
