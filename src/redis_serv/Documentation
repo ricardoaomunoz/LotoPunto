@@ -1,0 +1,52 @@
+docker run --name some-redis -p 127.0.0.1:6379:6379 -d --restart unless-stopped redis redis-server --appendonly yes
+
+Channel: money-insert
+Data: {
+    "inserted": int,
+    "credit": int,
+    "total": int
+}
+
+Channel: message-error
+Data: $message
+
+Channel: message-alert
+Data: $message
+
+Channel: message-warning
+Data: $message
+
+Channel: value-level
+Data: {
+    "channel1":[
+        {
+            "route": str,
+            "quantity": int
+        }
+    "channel2":[
+        {
+            "route": str,
+            "quantity": int
+        }
+    "channel3":[
+        {
+            "route": str,
+            "quantity": int
+        }
+    "channel4":[
+        {
+            "route": str,
+            "quantity": int
+        }
+    "channel5":[
+        {
+            "route": str,
+            "quantity": int
+        }
+    "channel6":[
+        {
+            "route": str,
+            "quantity": int
+        }
+    ]
+}
