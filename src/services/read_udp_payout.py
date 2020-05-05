@@ -81,6 +81,8 @@ async def ReadUDPport():
     # Bind to address and ip
     UDPServerSocket.bind((localIP, readPort))
     print("UDP server up and listening")
+    WriteUDPport("UDP server up and listening")
+    WriteUDPport("--------")
     # async with websockets.connect(uri) as websocket:
     # data = json.dumps({"action": "credit", **MONEY})
     # await websocket.send(data)

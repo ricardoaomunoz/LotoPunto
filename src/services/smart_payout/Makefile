@@ -47,9 +47,9 @@ clean :
 # -----------------------------------------
 # Release_target
 
-Release_target.BIN = smp-main
-Release_target.OBJ = smp-main.o ssp_helpers.o linux.o
-DEP_FILES += smp-main.d 
+Release_target.BIN = smart-payout-serv
+Release_target.OBJ = smart-payout-serv.o ssp_helpers.o linux.o
+DEP_FILES += smart-payout-serv.d 
 clean.OBJ += $(Release_target.BIN) $(Release_target.OBJ)
 
 Release_target : Release_target.before $(Release_target.BIN) Release_target.after_always
